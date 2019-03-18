@@ -16,6 +16,7 @@ export class CounterComponent {
   public score: number;
   public http: HttpClient;
   public baseUrl: string;
+  public maxRollsCountWithoutBonus: number = 3;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.http = http;
@@ -24,7 +25,7 @@ export class CounterComponent {
 
   public startTheGame() {
 
-    this.createPlayers();    
+    this.createPlayers();
   }
 
   public addRollResult() {
@@ -39,15 +40,24 @@ export class CounterComponent {
 
     this.score = 0;
 
-    if (this.rollNumber === 3) {
-
+    if (this.rollNumber === this.maxRollsCountWithoutBonus) {
       this.sendRoundData();
-
-    }, error => console.error(error));
     }
+  }
 
-  
+  sendRoundData() {
+    this.http.post(this.baseUrl + "api/game/" + this.game.id + "/player/" + this.currentPlayer.id + "/round",
+      this.currentRound)
+      .subscribe(result => {
+        let round = result;
 
+        this.rollNumber = 1;
+
+        this.getGameData();
+
+        this.getCurrentRoundNumber();
+      }, error => console.error(error));
+  }
 
   createPlayers() {
 
@@ -73,6 +83,14 @@ export class CounterComponent {
     }, error => console.error(error));
   };
 
+  getGameData() {
+    if (this.game != null) {
+      this.http.get<any>(this.baseUrl + 'api/line/1/game/' + this.game.id).subscribe(result => {
+        this.gameData = result;
+      }, error => console.error(error));
+    }
+  }
+
   getCurrentRoundNumber() {
     this.http.get<number>(this.baseUrl + "api/game/" + this.game.id + "/round/number").subscribe(result => {
 
@@ -85,6 +103,13 @@ export class CounterComponent {
 
   getCurrentPlayer() {
     this.http.get<any>(this.baseUrl + "api/game/" + this.game.id + "/round/" + this.currentRoundNumber + "/player").subscribe(result => {
+      if (result == null) {
+        this.currentPlayer.name = "Game Over - But it is possible to start again";
+        this.currentRoundNumber = 0;
+        this.rollNumber = 0;
+        return;
+      }
+
       this.currentPlayer = result;
 
       this.currentRound = {
@@ -95,27 +120,4 @@ export class CounterComponent {
       }
     }, error => console.error(error));
   }
-
-  getGameData() {
-    if (this.game != null) {
-      this.http.get<any>(this.baseUrl + 'api/line/1/game/' + this.game.id).subscribe(result => {
-        this.gameData = result;
-      },error => console.error(error));
-    }
-  }
-
-  sendRoundData() {
-    this.http.post(this.baseUrl + "api/game/" + this.game.id + "/player/" + this.currentPlayer.id + "/round",
-        this.currentRound)
-      .subscribe(result => {
-        let round = result;
-
-        this.rollNumber = 1;
-
-        this.getGameData();
-
-        this.getCurrentRoundNumber();
-      }, error => console.error(error));
-  }
-
 }

@@ -13,7 +13,7 @@
   <span class="input-group-btn">
     <button class="btn btn-primary" (click)="addRollResult()">Submit Roll Result</button>
   </span>
-  <input id="rollScore" class="form-control" [(ngModel)]="score" placeholder="rollScore" />
+  <input id="rollScore" class="form-control" [(ngModel)]="score" placeholder="rollScore" type="number" min="0" max="10" required/>
 </div>
 
 <br />
@@ -24,25 +24,27 @@
 
 <table class='table table-striped' *ngIf="gameData">
   <thead>
-  <tr>
-    <th>Player Name</th>
-    <th>1</th>
-    <th>2</th>
-    <th>3</th>
-    <th>4</th>
-    <th>5</th>
-    <th>6</th>
-    <th>7</th>
-    <th>8</th>
-    <th>9</th>
-    <th>10</th>
-  </tr>
+    <tr>
+      <th>Player Name</th>
+      <th>Total</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>10</th>
+    </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let player of gameData.players">
-    <td>{{ player.name }}</td>
-    <td *ngFor="let round of player.rounds">{{ round.score }}</td>        
-  </tr>
+    <tr *ngFor="let player of gameData.players">
+      <td>{{ player.name }}</td>
+      <td>{{ player.rounds[player.rounds.length-1].score }}</td>
+      <td *ngFor="let round of player.rounds">{{ round.score }}</td>
+    </tr>
   </tbody>
 </table>
 

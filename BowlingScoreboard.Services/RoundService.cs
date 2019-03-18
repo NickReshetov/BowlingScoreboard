@@ -76,7 +76,7 @@ namespace BowlingScoreboard.Services
         {
             var playerRounds = _roundRepository.GetRoundsByPlayerId(round.PlayerId);
 
-            var playerRoundScoresSum = playerRounds.Select(r => r.Score).Sum();
+            var playerRoundScoresSum = playerRounds.LastOrDefault()?.Score ?? 0;
 
             return playerRoundScoresSum;
         }
