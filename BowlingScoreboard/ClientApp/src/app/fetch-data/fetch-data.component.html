@@ -1,25 +1,27 @@
-<app-counter-component></app-counter-component>
-<h1>Weather forecast</h1>
+<h1>Player's Scores</h1>
 
-  <p>This component demonstrates fetching data from the server.</p>
+  <p *ngIf="!gameData"><em>Loading...</em></p>
 
-  <p *ngIf="!forecasts"><em>Loading...</em></p>
-
-  <table class='table table-striped' *ngIf="forecasts">
+  <table class='table table-striped' *ngIf="gameData">
     <thead>
       <tr>
-        <th>Date</th>
-        <th>Temp. (C)</th>
-        <th>Temp. (F)</th>
-        <th>Summary</th>
+        <th>Player Name</th>
+        <th>1</th>
+        <th>2</th>
+        <th>3</th>
+        <th>4</th>
+        <th>5</th>
+        <th>6</th>
+        <th>7</th>
+        <th>8</th>
+        <th>9</th>
+        <th>10</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let forecast of forecasts">
-        <td>{{ forecast.dateFormatted }}</td>
-        <td>{{ forecast.temperatureC }}</td>
-        <td>{{ forecast.temperatureF }}</td>
-        <td>{{ forecast.summary }}</td>
+      <tr *ngFor="let player of gameData.players">
+        <td>{{ player.name }}</td>
+        <td *ngFor="let round of player.rounds">{{ round.score }}</td>        
       </tr>
     </tbody>
   </table>

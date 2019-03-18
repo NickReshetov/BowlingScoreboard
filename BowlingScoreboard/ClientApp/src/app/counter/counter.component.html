@@ -1,12 +1,48 @@
 <h1>Counter</h1>
 
-<p>This is a simple example of an Angular component.</p>
+<p>Now paling: <strong>{{ currentPlayer != null ? currentPlayer.name : "" }}</strong></p>
+<p>Round number: <strong>{{ currentRoundNumber }}</strong></p>
+<p>Roll number: <strong>{{ rollNumber }}</strong></p>
 
-<p>Current count: <strong>{{ currentCount }}</strong></p>
+<button class="btn btn-primary" (click)="startTheGame()">Start The Game</button>
+
+<br/>
+<br />
 
 <div class="input-group">
   <span class="input-group-btn">
-    <button class="btn btn-primary" (click)="incrementCounter()">Increment</button>
+    <button class="btn btn-primary" (click)="addRollResult()">Submit Roll Result</button>
   </span>
-  <input id="rollScore" class="form-control" [(ngModel)]="currentCount" placeholder="rollScore" />
+  <input id="rollScore" class="form-control" [(ngModel)]="score" placeholder="rollScore" />
 </div>
+
+<br />
+
+<h1>Player's Scores</h1>
+
+<p *ngIf="!gameData"><em>Loading...</em></p>
+
+<table class='table table-striped' *ngIf="gameData">
+  <thead>
+  <tr>
+    <th>Player Name</th>
+    <th>1</th>
+    <th>2</th>
+    <th>3</th>
+    <th>4</th>
+    <th>5</th>
+    <th>6</th>
+    <th>7</th>
+    <th>8</th>
+    <th>9</th>
+    <th>10</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let player of gameData.players">
+    <td>{{ player.name }}</td>
+    <td *ngFor="let round of player.rounds">{{ round.score }}</td>        
+  </tr>
+  </tbody>
+</table>
+

@@ -4,14 +4,16 @@ using BowlingScoreboard.DataAccess.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BowlingScoreboard.DataAccess.Migrations
 {
     [DbContext(typeof(BowlingScoreboardDbContext))]
-    partial class BowlingScoreboardDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190318164206_MakeRoundTypeNullable")]
+    partial class MakeRoundTypeNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

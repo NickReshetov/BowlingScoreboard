@@ -10,6 +10,8 @@ namespace BowlingScoreboard.Services
     {
         private readonly IRoundRepository _roundRepository;
 
+        private const int pinsCount = 10;
+
         public RoundService(IRoundRepository roundRepository)
         {
             _roundRepository = roundRepository;
@@ -39,28 +41,28 @@ namespace BowlingScoreboard.Services
 
             RoundTypeDto roundTypeDto = null;
 
-            var isOpen = currentRoundRollsSum < 10;
+            var isOpen = currentRoundRollsSum < pinsCount;
             if (isOpen)
             {
                 round.Score = previousRoundsScoresSum + currentRoundRollsSum;
                 roundTypeDto = _roundRepository.GetRoundTypeByName("Open");                
             }
 
-            var isStrike = firstRollScore == 10;
+            var isStrike = firstRollScore == pinsCount;
             if (isStrike)
             {
                 round.Score = previousRoundsScoresSum + currentRoundRollsSum + 10;
                 roundTypeDto = _roundRepository.GetRoundTypeByName("Strike");
             }
 
-            var isSpare = currentRoundRollsSum == 10;
+            var isSpare = currentRoundRollsSum == pinsCount;
             if (isSpare)
             {
                 round.Score = previousRoundsScoresSum + firstRollScore + 10;
                 roundTypeDto = _roundRepository.GetRoundTypeByName("Spare");
             }
 
-            round.RoundTypeId = roundTypeDto.Id;
+            round.RoundTypeId = roundTypeDto?.Id;
             
             return round;
         }

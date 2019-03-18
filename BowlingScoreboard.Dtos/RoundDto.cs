@@ -11,7 +11,7 @@ namespace BowlingScoreboard.Dtos
 
         public int Score { get; set; }
 
-        public Guid RoundTypeId { get; set; }
+        public Guid? RoundTypeId { get; set; }
 
         public RoundTypeDto RoundType { get; set; }
         

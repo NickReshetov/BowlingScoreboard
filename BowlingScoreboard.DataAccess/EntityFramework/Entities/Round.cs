@@ -9,7 +9,7 @@ namespace BowlingScoreboard.DataAccess.EntityFramework.Entities
 
         public int Score { get; set; }
 
-        public Guid RoundTypeId { get; set; }
+        public Guid? RoundTypeId { get; set; }
 
         public RoundType RoundType { get; set; }
 
