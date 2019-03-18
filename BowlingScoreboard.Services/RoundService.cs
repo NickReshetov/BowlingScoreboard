@@ -43,8 +43,7 @@ namespace BowlingScoreboard.Services
             if (isOpen)
             {
                 round.Score = previousRoundsScoresSum + currentRoundRollsSum;
-                roundTypeDto = _roundRepository.GetRoundTypeByName("Open");
-                
+                roundTypeDto = _roundRepository.GetRoundTypeByName("Open");                
             }
 
             var isStrike = firstRollScore == 10;
@@ -62,8 +61,7 @@ namespace BowlingScoreboard.Services
             }
 
             round.RoundTypeId = roundTypeDto.Id;
-            round.RoundTypeName = roundTypeDto.Name;
-
+            
             return round;
         }
 

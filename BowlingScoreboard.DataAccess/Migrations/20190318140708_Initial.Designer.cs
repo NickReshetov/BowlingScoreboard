@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BowlingScoreboard.DataAccess.Migrations
 {
     [DbContext(typeof(BowlingScoreboardDbContext))]
-    [Migration("20190318100754_Initial")]
+    [Migration("20190318140708_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,7 +49,7 @@ namespace BowlingScoreboard.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("16cad4d6-2a6a-4e67-a240-c826912fc523"),
+                            Id = new Guid("e1840d44-905e-48c3-aff3-e11aebdffe22"),
                             Number = 1
                         });
                 });
@@ -99,13 +99,46 @@ namespace BowlingScoreboard.DataAccess.Migrations
 
                     b.Property<Guid>("PlayerId");
 
+                    b.Property<Guid>("RoundTypeId");
+
                     b.Property<int>("Score");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PlayerId");
 
+                    b.HasIndex("RoundTypeId");
+
                     b.ToTable("Rounds");
+                });
+
+            modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.RoundType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoundTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("58890a4e-b5ff-4841-b469-a807b9c96c63"),
+                            Name = "Strike"
+                        },
+                        new
+                        {
+                            Id = new Guid("59337048-c1aa-4b94-a80c-0e32671be4fd"),
+                            Name = "Spare"
+                        },
+                        new
+                        {
+                            Id = new Guid("309bd6f7-0fb7-4d63-8310-23887496e50a"),
+                            Name = "Open"
+                        });
                 });
 
             modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.Game", b =>
@@ -137,6 +170,11 @@ namespace BowlingScoreboard.DataAccess.Migrations
                     b.HasOne("BowlingScoreboard.DataAccess.EntityFramework.Entities.Player", "Player")
                         .WithMany("Rounds")
                         .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BowlingScoreboard.DataAccess.EntityFramework.Entities.RoundType", "RoundType")
+                        .WithMany()
+                        .HasForeignKey("RoundTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

@@ -8,13 +8,13 @@ namespace BowlingScoreboard.Dtos
         public Guid Id { get; set; }
 
         public int Number { get; set; }
-        
-        public Guid RoundTypeId { get; set; }
-
-        public string RoundTypeName { get; set; }
 
         public int Score { get; set; }
 
+        public Guid RoundTypeId { get; set; }
+
+        public RoundTypeDto RoundType { get; set; }
+        
         public Guid GameId { get; set; }
 
         public Guid PlayerId { get; set; }

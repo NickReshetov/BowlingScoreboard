@@ -88,7 +88,7 @@ namespace BowlingScoreboard.DataAccess.Repositories
                     .SingleOrDefault(rt => rt.Name == roundTypeName);
 
 
-                roundTypeDto = _mapper.Map<RoundTypeDto>(roundType);
+                roundTypeDto = _mapper.Map<RoundTypeDto>(roundType);                
             }
 
             return roundTypeDto;

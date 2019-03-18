@@ -47,7 +47,7 @@ namespace BowlingScoreboard.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("89f991a8-359a-4482-81d1-f3905ac3f4a0"),
+                            Id = new Guid("e1840d44-905e-48c3-aff3-e11aebdffe22"),
                             Number = 1
                         });
                 });
@@ -124,17 +124,17 @@ namespace BowlingScoreboard.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("287ca5d5-d3da-4c2a-a08a-7f34173a5550"),
+                            Id = new Guid("58890a4e-b5ff-4841-b469-a807b9c96c63"),
                             Name = "Strike"
                         },
                         new
                         {
-                            Id = new Guid("dc5f774e-905d-40fe-8949-e1087106b5a2"),
+                            Id = new Guid("59337048-c1aa-4b94-a80c-0e32671be4fd"),
                             Name = "Spare"
                         },
                         new
                         {
-                            Id = new Guid("d2d92cc0-9a18-4c31-9025-abaf089ce50b"),
+                            Id = new Guid("309bd6f7-0fb7-4d63-8310-23887496e50a"),
                             Name = "Open"
                         });
                 });

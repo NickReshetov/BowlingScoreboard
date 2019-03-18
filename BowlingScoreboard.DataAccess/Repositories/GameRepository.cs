@@ -53,6 +53,7 @@ namespace BowlingScoreboard.DataAccess.Repositories
                 var game = context.Games
                     .Include(g => g.Players)
                     .ThenInclude(p => p.Rounds)
+                    .ThenInclude(r => r.RoundType)
                     .SingleOrDefault(g => g.Id == gameId);
 
                 gameDto = _mapper.Map<GameDto>(game);
