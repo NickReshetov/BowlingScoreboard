@@ -4,4 +4,9 @@
 
 <p>Current count: <strong>{{ currentCount }}</strong></p>
 
-<button class="btn btn-primary" (click)="incrementCounter()">Increment</button>
+<div class="input-group">
+  <span class="input-group-btn">
+    <button class="btn btn-primary" (click)="incrementCounter()">Increment</button>
+  </span>
+  <input id="rollScore" class="form-control" [(ngModel)]="currentCount" placeholder="rollScore" />
+</div>
