@@ -6,6 +6,7 @@ using BowlingScoreboard.DataAccess.EntityFramework;
 using BowlingScoreboard.DataAccess.EntityFramework.Entities;
 using BowlingScoreboard.DataAccess.Repositories.Interfaces;
 using BowlingScoreboard.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace BowlingScoreboard.DataAccess.Repositories
 {
@@ -25,15 +26,7 @@ namespace BowlingScoreboard.DataAccess.Repositories
             using (var context = new BowlingScoreboardDbContextFactory().CreateDbContext())
             {
                 var roundEntity = _mapper.Map<Round>(round);
-
-                var roundPlayer = new PlayerRound
-                {
-                    PlayerId = round.PlayerId,
-                    RoundId = round.Id
-                };
-
-                roundEntity.PlayersRounds = new List<PlayerRound> { roundPlayer };
-
+        
                 context.Rounds.Add(roundEntity);
 
                 context.SaveChanges();
@@ -56,7 +49,7 @@ namespace BowlingScoreboard.DataAccess.Repositories
             {
                 var allPlayersRoundsCount = context.Players
                     .Where(p => p.GameId == gameId)
-                    .Select(p => p.PlayersRounds.Select(pr => pr.Round).Count())
+                    .Select(p => p.Rounds.Count)
                     .ToList();
 
                 var lastRoundNumber = allPlayersRoundsCount.Min();
@@ -69,19 +62,36 @@ namespace BowlingScoreboard.DataAccess.Repositories
 
         public IEnumerable<RoundDto> GetRoundsByPlayerId(Guid playerId)
         {
-            IEnumerable<RoundDto> rounds;
+            IEnumerable<RoundDto> roundDtos;
 
             using (var context = new BowlingScoreboardDbContextFactory().CreateDbContext())
             {
-                var playerRounds = context.PlayersRounds
-                    .Where(p => p.PlayerId == playerId)
-                    .Select(pr => pr.Round)
+                var rounds = context.Rounds
+                    .Include(r => r.Player)
+                    .Where(r => r.Player.Id == playerId)
                     .ToList();
 
-                rounds = _mapper.Map<IEnumerable<RoundDto>>(playerRounds);
+                roundDtos = _mapper.Map<IEnumerable<RoundDto>>(rounds);
             }
 
-            return rounds;
+            return roundDtos;
+        }
+
+        public RoundTypeDto GetRoundTypeByName(string roundTypeName)
+        {
+            RoundTypeDto roundTypeDto;
+
+            using (var context = new BowlingScoreboardDbContextFactory().CreateDbContext())
+            {
+                var roundType = context
+                    .RoundTypes
+                    .SingleOrDefault(rt => rt.Name == roundTypeName);
+
+
+                roundTypeDto = _mapper.Map<RoundTypeDto>(roundType);
+            }
+
+            return roundTypeDto;
         }
     }
 }

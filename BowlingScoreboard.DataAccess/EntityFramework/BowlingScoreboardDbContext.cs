@@ -13,27 +13,18 @@ namespace BowlingScoreboard.DataAccess.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var lines = new List<Line>
+            var line = new Line {Id = Guid.NewGuid(), Number = 1};
+
+            modelBuilder.Entity<Line>().HasData(line);
+
+            var roundTypes = new List<RoundType>
             {
-                new Line {Id = Guid.NewGuid(), Number = 1},
-                new Line {Id = Guid.NewGuid(), Number = 2},
-                new Line {Id = Guid.NewGuid(), Number = 3}
+                new RoundType {Id = Guid.NewGuid(), Name = "Strike"},
+                new RoundType {Id = Guid.NewGuid(), Name = "Spare"},
+                new RoundType {Id = Guid.NewGuid(), Name = "Open"}
             };
 
-            modelBuilder.Entity<Line>().HasData(lines);
-
-            modelBuilder.Entity<PlayerRound>()
-                .HasKey(pr => new { pr.PlayerId, pr.RoundId });
-
-            modelBuilder.Entity<PlayerRound>()
-                .HasOne(pr => pr.Player)
-                .WithMany(p => p.PlayersRounds)
-                .HasForeignKey(p => p.PlayerId);
-
-            modelBuilder.Entity<PlayerRound>()
-                .HasOne(pr => pr.Round)
-                .WithMany(r => r.PlayersRounds)
-                .HasForeignKey(pr => pr.RoundId);
+            modelBuilder.Entity<RoundType>().HasData(roundTypes);
         }
 
         public DbSet<Line> Lines { get; set; }
@@ -41,10 +32,10 @@ namespace BowlingScoreboard.DataAccess.EntityFramework
         public DbSet<Game> Games { get; set; }
 
         public DbSet<Player> Players { get; set; }
-
-        public DbSet<PlayerRound> PlayersRounds { get; set; }
-
+        
         public DbSet<Round> Rounds { get; set; }
+
+        public DbSet<RoundType> RoundTypes { get; set; }
 
         public DbSet<Roll> Rolls { get; set; }
     }

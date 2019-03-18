@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BowlingScoreboard.DataAccess.Migrations
 {
     [DbContext(typeof(BowlingScoreboardDbContext))]
-    [Migration("20190317180210_Initial")]
+    [Migration("20190318100754_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,11 +26,7 @@ namespace BowlingScoreboard.DataAccess.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Created");
-
                     b.Property<Guid>("LineId");
-
-                    b.Property<DateTime>("Modified");
 
                     b.HasKey("Id");
 
@@ -44,15 +40,18 @@ namespace BowlingScoreboard.DataAccess.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Created");
-
-                    b.Property<DateTime>("Modified");
-
                     b.Property<int>("Number");
 
                     b.HasKey("Id");
 
                     b.ToTable("Lines");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("16cad4d6-2a6a-4e67-a240-c826912fc523"),
+                            Number = 1
+                        });
                 });
 
             modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.Player", b =>
@@ -60,11 +59,7 @@ namespace BowlingScoreboard.DataAccess.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Created");
-
                     b.Property<Guid>("GameId");
-
-                    b.Property<DateTime>("Modified");
 
                     b.Property<string>("Name");
 
@@ -77,27 +72,10 @@ namespace BowlingScoreboard.DataAccess.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.PlayerRound", b =>
-                {
-                    b.Property<Guid>("PlayerId");
-
-                    b.Property<Guid>("RoundId");
-
-                    b.HasKey("PlayerId", "RoundId");
-
-                    b.HasIndex("RoundId");
-
-                    b.ToTable("PlayersRounds");
-                });
-
             modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.Roll", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("Created");
-
-                    b.Property<DateTime>("Modified");
 
                     b.Property<int>("Number");
 
@@ -117,15 +95,15 @@ namespace BowlingScoreboard.DataAccess.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("Created");
-
-                    b.Property<DateTime>("Modified");
-
                     b.Property<int>("Number");
+
+                    b.Property<Guid>("PlayerId");
 
                     b.Property<int>("Score");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
 
                     b.ToTable("Rounds");
                 });
@@ -146,24 +124,19 @@ namespace BowlingScoreboard.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.PlayerRound", b =>
-                {
-                    b.HasOne("BowlingScoreboard.DataAccess.EntityFramework.Entities.Player", "Player")
-                        .WithMany("PlayersRounds")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BowlingScoreboard.DataAccess.EntityFramework.Entities.Round", "Round")
-                        .WithMany("PlayersRounds")
-                        .HasForeignKey("RoundId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.Roll", b =>
                 {
                     b.HasOne("BowlingScoreboard.DataAccess.EntityFramework.Entities.Round", "Round")
                         .WithMany("Rolls")
                         .HasForeignKey("RoundId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.Round", b =>
+                {
+                    b.HasOne("BowlingScoreboard.DataAccess.EntityFramework.Entities.Player", "Player")
+                        .WithMany("Rounds")
+                        .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

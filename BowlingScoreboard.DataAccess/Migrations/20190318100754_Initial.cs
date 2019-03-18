@@ -12,8 +12,6 @@ namespace BowlingScoreboard.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false),
-                    Modified = table.Column<DateTime>(nullable: false),
                     Number = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -22,27 +20,10 @@ namespace BowlingScoreboard.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Rounds",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false),
-                    Modified = table.Column<DateTime>(nullable: false),
-                    Number = table.Column<int>(nullable: false),
-                    Score = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Rounds", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Games",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false),
-                    Modified = table.Column<DateTime>(nullable: false),
                     LineId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -57,34 +38,10 @@ namespace BowlingScoreboard.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Rolls",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false),
-                    Modified = table.Column<DateTime>(nullable: false),
-                    Number = table.Column<int>(nullable: false),
-                    Score = table.Column<int>(nullable: false),
-                    RoundId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Rolls", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Rolls_Rounds_RoundId",
-                        column: x => x.RoundId,
-                        principalTable: "Rounds",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Players",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Created = table.Column<DateTime>(nullable: false),
-                    Modified = table.Column<DateTime>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     PlayOrder = table.Column<int>(nullable: false),
                     GameId = table.Column<Guid>(nullable: false)
@@ -101,28 +58,49 @@ namespace BowlingScoreboard.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlayersRounds",
+                name: "Rounds",
                 columns: table => new
                 {
-                    PlayerId = table.Column<Guid>(nullable: false),
-                    RoundId = table.Column<Guid>(nullable: false)
+                    Id = table.Column<Guid>(nullable: false),
+                    Number = table.Column<int>(nullable: false),
+                    Score = table.Column<int>(nullable: false),
+                    PlayerId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayersRounds", x => new { x.PlayerId, x.RoundId });
+                    table.PrimaryKey("PK_Rounds", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PlayersRounds_Players_PlayerId",
+                        name: "FK_Rounds_Players_PlayerId",
                         column: x => x.PlayerId,
                         principalTable: "Players",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rolls",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Number = table.Column<int>(nullable: false),
+                    Score = table.Column<int>(nullable: false),
+                    RoundId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rolls", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PlayersRounds_Rounds_RoundId",
+                        name: "FK_Rolls_Rounds_RoundId",
                         column: x => x.RoundId,
                         principalTable: "Rounds",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Lines",
+                columns: new[] { "Id", "Number" },
+                values: new object[] { new Guid("16cad4d6-2a6a-4e67-a240-c826912fc523"), 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Games_LineId",
@@ -135,29 +113,26 @@ namespace BowlingScoreboard.DataAccess.Migrations
                 column: "GameId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlayersRounds_RoundId",
-                table: "PlayersRounds",
-                column: "RoundId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Rolls_RoundId",
                 table: "Rolls",
                 column: "RoundId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rounds_PlayerId",
+                table: "Rounds",
+                column: "PlayerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PlayersRounds");
-
-            migrationBuilder.DropTable(
                 name: "Rolls");
 
             migrationBuilder.DropTable(
-                name: "Players");
+                name: "Rounds");
 
             migrationBuilder.DropTable(
-                name: "Rounds");
+                name: "Players");
 
             migrationBuilder.DropTable(
                 name: "Games");

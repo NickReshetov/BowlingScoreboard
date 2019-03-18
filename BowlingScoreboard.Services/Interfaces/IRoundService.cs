@@ -7,6 +7,8 @@ namespace BowlingScoreboard.Services.Interfaces
     {
         int GetCurrentRoundNumber(Guid gameId);
 
-        RoundDto CreateRound(RoundDto round);    
+        RoundDto CreateRound(RoundDto round);
+
+        RoundDto CalculateRoundScore(RoundDto round);
     }
 }

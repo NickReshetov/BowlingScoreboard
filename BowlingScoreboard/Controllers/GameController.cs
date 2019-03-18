@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BowlingScoreboard.Dtos;
 using BowlingScoreboard.Services.Interfaces;
@@ -11,6 +12,12 @@ namespace BowlingScoreboard.Controllers
         public GameController(IGameService gameService)
         {
             _gameService = gameService;
+        }
+
+        [HttpGet("api/line/{lineNumber}/game/{gameId}")]
+        public GameDto GetGame(int lineNumber, Guid gameId)
+        {
+            return _gameService.GetGame(gameId);
         }
 
         [HttpPost("api/line/{lineNumber}/game")]

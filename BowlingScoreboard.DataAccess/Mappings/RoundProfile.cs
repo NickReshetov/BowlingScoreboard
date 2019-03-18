@@ -14,6 +14,8 @@ namespace BowlingScoreboard.DataAccess.Mappings
         {
             CreateMap<Round, RoundDto>().ReverseMap();
 
+            CreateMap<RoundType, RoundTypeDto>().ReverseMap();
+
             CreateMap<Roll, RollDto>().ReverseMap();
         }
     }

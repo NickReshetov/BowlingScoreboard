@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using BowlingScoreboard.DataAccess.EntityFramework;
 using BowlingScoreboard.DataAccess.EntityFramework.Entities;
 using BowlingScoreboard.DataAccess.Repositories.Interfaces;
 using BowlingScoreboard.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace BowlingScoreboard.DataAccess.Repositories
 {
@@ -37,6 +39,27 @@ namespace BowlingScoreboard.DataAccess.Repositories
                 context.SaveChanges();
 
                 gameDto = _mapper.Map<GameDto>(game);
+            }
+
+            return gameDto;
+        }
+
+        public GameDto GetGameById(Guid gameId)
+        {
+            GameDto gameDto;
+
+            using (var context = new BowlingScoreboardDbContextFactory().CreateDbContext())
+            {
+                var game = context.Games
+                    .Include(g => g.Players)
+                    .ThenInclude(p => p.Rounds)
+                    .SingleOrDefault(g => g.Id == gameId);
+
+                gameDto = _mapper.Map<GameDto>(game);
+
+                gameDto.Players
+                    .ToList()
+                    .ForEach(p => p.Rounds.ToList().ForEach(r => r.GameId = gameId));
             }
 
             return gameDto;

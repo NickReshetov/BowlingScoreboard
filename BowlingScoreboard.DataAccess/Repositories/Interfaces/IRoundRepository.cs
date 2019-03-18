@@ -11,5 +11,7 @@ namespace BowlingScoreboard.DataAccess.Repositories.Interfaces
         int GetCurrentRoundNumber(Guid gameId);
 
         IEnumerable<RoundDto> GetRoundsByPlayerId(Guid playerId);
+
+        RoundTypeDto GetRoundTypeByName(string roundTypeName);
     }
 }

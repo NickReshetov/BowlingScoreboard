@@ -5,6 +5,7 @@ using AutoMapper;
 using BowlingScoreboard.DataAccess.EntityFramework;
 using BowlingScoreboard.DataAccess.Repositories.Interfaces;
 using BowlingScoreboard.Dtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace BowlingScoreboard.DataAccess.Repositories
 {
@@ -23,9 +24,10 @@ namespace BowlingScoreboard.DataAccess.Repositories
         
             using (var context = new BowlingScoreboardDbContextFactory().CreateDbContext())
             {
-                var players = context.PlayersRounds
-                    .Where(pr => pr.Round.Number == roundNumber && pr.Player.GameId == gameId)
-                    .Select(pr => pr.Player)
+                var players = context.Rounds
+                    .Include(r => r.Player)
+                    .Where(r => r.Number == roundNumber && r.Player.GameId == gameId)
+                    .Select(r => r.Player)
                     .OrderBy(p => p.PlayOrder)
                     .ToList();
 

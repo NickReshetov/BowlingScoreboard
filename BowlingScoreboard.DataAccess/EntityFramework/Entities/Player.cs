@@ -12,7 +12,7 @@ namespace BowlingScoreboard.DataAccess.EntityFramework.Entities
         public Guid GameId { get; set; }
 
         public Game Game { get; set; }
-
-        public ICollection<PlayerRound> PlayersRounds { get; set; }
+        
+        public ICollection<Round> Rounds { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BowlingScoreboard.DataAccess.Repositories.Interfaces;
 using BowlingScoreboard.Dtos;
 using BowlingScoreboard.Services.Interfaces;
@@ -17,6 +18,11 @@ namespace BowlingScoreboard.Services
         public GameDto CreateGame(int lineNumber, IEnumerable<PlayerDto> players)
         {
             return _gameRepository.CreateGame(lineNumber, players);
+        }
+
+        public GameDto GetGame(Guid gameId)
+        {
+            return _gameRepository.GetGameById(gameId);
         }
     }
 }

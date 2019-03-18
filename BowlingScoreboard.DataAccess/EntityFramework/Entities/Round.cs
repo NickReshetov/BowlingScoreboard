@@ -9,7 +9,13 @@ namespace BowlingScoreboard.DataAccess.EntityFramework.Entities
 
         public int Score { get; set; }
 
-        public ICollection<PlayerRound> PlayersRounds { get; set; }
+        public Guid RoundTypeId { get; set; }
+
+        public RoundType RoundType { get; set; }
+
+        public Guid PlayerId { get; set; }
+
+        public Player Player { get; set; }
 
         public ICollection<Roll> Rolls { get; set; }
     }

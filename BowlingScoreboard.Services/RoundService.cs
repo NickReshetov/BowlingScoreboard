@@ -29,15 +29,40 @@ namespace BowlingScoreboard.Services
             return createdRound;
         }
 
-        private RoundDto CalculateRoundScore(RoundDto round)
+        public RoundDto CalculateRoundScore(RoundDto round)
         {
             var previousRoundsScoresSum = GetPreviousRoundsScoresSum(round);
 
             var currentRoundRollsSum = GetCurrentRoundScore(round);
 
-            var currentRoundScore = previousRoundsScoresSum + currentRoundRollsSum;
+            var firstRollScore = round.Rolls.FirstOrDefault().Score;
 
-            round.Score = currentRoundScore;
+            RoundTypeDto roundTypeDto = null;
+
+            var isOpen = currentRoundRollsSum < 10;
+            if (isOpen)
+            {
+                round.Score = previousRoundsScoresSum + currentRoundRollsSum;
+                roundTypeDto = _roundRepository.GetRoundTypeByName("Open");
+                
+            }
+
+            var isStrike = firstRollScore == 10;
+            if (isStrike)
+            {
+                round.Score = previousRoundsScoresSum + currentRoundRollsSum + 10;
+                roundTypeDto = _roundRepository.GetRoundTypeByName("Strike");
+            }
+
+            var isSpare = currentRoundRollsSum == 10;
+            if (isSpare)
+            {
+                round.Score = previousRoundsScoresSum + firstRollScore + 10;
+                roundTypeDto = _roundRepository.GetRoundTypeByName("Spare");
+            }
+
+            round.RoundTypeId = roundTypeDto.Id;
+            round.RoundTypeName = roundTypeDto.Name;
 
             return round;
         }

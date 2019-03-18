@@ -47,18 +47,8 @@ namespace BowlingScoreboard.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("9f16b43b-9dbe-4d87-8a2a-2abed4923b70"),
+                            Id = new Guid("89f991a8-359a-4482-81d1-f3905ac3f4a0"),
                             Number = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("64c30ed4-ab42-4f24-94d7-b45fbadcfb40"),
-                            Number = 2
-                        },
-                        new
-                        {
-                            Id = new Guid("a06e08f7-77be-465a-9346-dbfc82fe2a06"),
-                            Number = 3
                         });
                 });
 
@@ -78,19 +68,6 @@ namespace BowlingScoreboard.DataAccess.Migrations
                     b.HasIndex("GameId");
 
                     b.ToTable("Players");
-                });
-
-            modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.PlayerRound", b =>
-                {
-                    b.Property<Guid>("PlayerId");
-
-                    b.Property<Guid>("RoundId");
-
-                    b.HasKey("PlayerId", "RoundId");
-
-                    b.HasIndex("RoundId");
-
-                    b.ToTable("PlayersRounds");
                 });
 
             modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.Roll", b =>
@@ -118,11 +95,48 @@ namespace BowlingScoreboard.DataAccess.Migrations
 
                     b.Property<int>("Number");
 
+                    b.Property<Guid>("PlayerId");
+
+                    b.Property<Guid>("RoundTypeId");
+
                     b.Property<int>("Score");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PlayerId");
+
+                    b.HasIndex("RoundTypeId");
+
                     b.ToTable("Rounds");
+                });
+
+            modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.RoundType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoundTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("287ca5d5-d3da-4c2a-a08a-7f34173a5550"),
+                            Name = "Strike"
+                        },
+                        new
+                        {
+                            Id = new Guid("dc5f774e-905d-40fe-8949-e1087106b5a2"),
+                            Name = "Spare"
+                        },
+                        new
+                        {
+                            Id = new Guid("d2d92cc0-9a18-4c31-9025-abaf089ce50b"),
+                            Name = "Open"
+                        });
                 });
 
             modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.Game", b =>
@@ -141,24 +155,24 @@ namespace BowlingScoreboard.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.PlayerRound", b =>
-                {
-                    b.HasOne("BowlingScoreboard.DataAccess.EntityFramework.Entities.Player", "Player")
-                        .WithMany("PlayersRounds")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("BowlingScoreboard.DataAccess.EntityFramework.Entities.Round", "Round")
-                        .WithMany("PlayersRounds")
-                        .HasForeignKey("RoundId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.Roll", b =>
                 {
                     b.HasOne("BowlingScoreboard.DataAccess.EntityFramework.Entities.Round", "Round")
                         .WithMany("Rolls")
                         .HasForeignKey("RoundId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BowlingScoreboard.DataAccess.EntityFramework.Entities.Round", b =>
+                {
+                    b.HasOne("BowlingScoreboard.DataAccess.EntityFramework.Entities.Player", "Player")
+                        .WithMany("Rounds")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BowlingScoreboard.DataAccess.EntityFramework.Entities.RoundType", "RoundType")
+                        .WithMany()
+                        .HasForeignKey("RoundTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
