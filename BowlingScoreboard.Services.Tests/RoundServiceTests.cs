@@ -67,11 +67,11 @@ namespace BowlingScoreboard.Services.Tests
         [Fact]
         public void CalculateRoundScore_IsStrike()
         {
-            var strikeRound = Setup(10, 5);
+            var strikeRound = Setup(10, 0);
 
             var calculatedStrikeRound = _roundService.CalculateRoundScore(strikeRound);
 
-            Assert.Equal(PreviousRoundScore + 25, calculatedStrikeRound.Score);
+            Assert.Equal(PreviousRoundScore + 20, calculatedStrikeRound.Score);
             Assert.Equal(_strikeTypeId, calculatedStrikeRound.RoundTypeId);
             Assert.Null(calculatedStrikeRound.RoundType);
         }

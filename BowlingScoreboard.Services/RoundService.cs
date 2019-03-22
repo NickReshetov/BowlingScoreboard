@@ -41,13 +41,6 @@ namespace BowlingScoreboard.Services
 
             RoundTypeDto roundTypeDto = null;
 
-            var isOpen = currentRoundRollsSum < PinsCount;
-            if (isOpen)
-            {
-                round.Score = previousRoundsScoresSum + currentRoundRollsSum;
-                roundTypeDto = _roundRepository.GetRoundTypeByName("Open");                
-            }
-
             var isStrike = firstRollScore == PinsCount;
             if (isStrike)
             {
@@ -55,13 +48,20 @@ namespace BowlingScoreboard.Services
                 roundTypeDto = _roundRepository.GetRoundTypeByName("Strike");
             }
 
-            var isSpare = currentRoundRollsSum == PinsCount;
+            var isOpen = currentRoundRollsSum < PinsCount ;
+            if (isOpen)
+            {
+                round.Score = previousRoundsScoresSum + currentRoundRollsSum;
+                roundTypeDto = _roundRepository.GetRoundTypeByName("Open");                
+            }
+
+            var isSpare = (currentRoundRollsSum == PinsCount && firstRollScore != PinsCount);
             if (isSpare)
             {
                 round.Score = previousRoundsScoresSum + firstRollScore + 10;
                 roundTypeDto = _roundRepository.GetRoundTypeByName("Spare");
             }
-
+            
             if (!isSpare && !isOpen & !isStrike)
                 throw new ArgumentOutOfRangeException();
 
@@ -72,7 +72,12 @@ namespace BowlingScoreboard.Services
 
         private int GetCurrentRoundScore(RoundDto round)
         {
-            return round.Rolls.Select(r => r.Score).Sum();
+            var roundScore = round.Rolls.Select(r => r.Score).Sum();
+
+            if (roundScore > PinsCount)
+                throw new ArgumentOutOfRangeException();
+
+            return roundScore;
         }
 
         private int GetPreviousRoundScoresSum(RoundDto round)
