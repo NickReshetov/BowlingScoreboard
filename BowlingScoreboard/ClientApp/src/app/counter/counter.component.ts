@@ -12,8 +12,8 @@ export class CounterComponent {
   public currentRoundNumber: number;
   public currentPlayer: any;
   public currentRound: any;
-  public rollNumber: number = 1;
-  public score: number;
+  public score: any;
+  public rollNumber: number;
   public http: HttpClient;
   public baseUrl: string;
   public maxRollsCountWithoutBonus: number = 3;
@@ -24,21 +24,26 @@ export class CounterComponent {
   }
 
   public startTheGame() {
-
+    this.score = "";
+    this.rollNumber = 1;
     this.createPlayers();
   }
 
   public addRollResult() {
+
+    if (this.currentRoundNumber === 0 && this.rollNumber === 0)
+      return;
+
     this.rollNumber++;
 
     let currentRoll = {
       "number": this.rollNumber,
-      "score": this.score
+      "score": this.score === "" ? 0 : this.score
     };
 
     this.currentRound.rolls.push(currentRoll);
 
-    this.score = 0;
+    this.score = "";
 
     if (this.rollNumber === this.maxRollsCountWithoutBonus) {
       this.sendRoundData();

@@ -60,7 +60,7 @@ namespace BowlingScoreboard.DataAccess.Repositories
             return currentRoundNumber;
         }
 
-        public IEnumerable<RoundDto> GetRoundsByPlayerId(Guid playerId)
+        public virtual IEnumerable<RoundDto> GetRoundsByPlayerId(Guid playerId)
         {
             IEnumerable<RoundDto> roundDtos;
 
@@ -77,7 +77,7 @@ namespace BowlingScoreboard.DataAccess.Repositories
             return roundDtos;
         }
 
-        public RoundTypeDto GetRoundTypeByName(string roundTypeName)
+        public virtual RoundTypeDto GetRoundTypeByName(string roundTypeName)
         {
             RoundTypeDto roundTypeDto;
 

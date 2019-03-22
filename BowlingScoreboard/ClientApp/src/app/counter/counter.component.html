@@ -42,7 +42,7 @@
   <tbody>
     <tr *ngFor="let player of gameData.players">
       <td>{{ player.name }}</td>
-      <td>{{ player.rounds[player.rounds.length-1].score }}</td>
+      <td>{{ player.rounds.length > 0 ? player.rounds[player.rounds.length-1].score : ""}}</td>
       <td *ngFor="let round of player.rounds">{{ round.score }}</td>
     </tr>
   </tbody>

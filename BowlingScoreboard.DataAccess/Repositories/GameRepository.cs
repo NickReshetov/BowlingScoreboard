@@ -60,7 +60,11 @@ namespace BowlingScoreboard.DataAccess.Repositories
 
                 gameDto.Players
                     .ToList()
-                    .ForEach(p => p.Rounds.ToList().ForEach(r => r.GameId = gameId));
+                    .ForEach(p =>
+                    {
+                        p.Rounds.ToList().ForEach(r => r.GameId = gameId);
+                        p.Rounds = p.Rounds.OrderBy(r => r.Number);
+                    });
             }
 
             return gameDto;

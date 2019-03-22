@@ -10,7 +10,7 @@ namespace BowlingScoreboard.Services
     {
         private readonly IRoundRepository _roundRepository;
 
-        private const int pinsCount = 10;
+        private const int PinsCount = 10;
 
         public RoundService(IRoundRepository roundRepository)
         {
@@ -33,7 +33,7 @@ namespace BowlingScoreboard.Services
 
         public RoundDto CalculateRoundScore(RoundDto round)
         {
-            var previousRoundsScoresSum = GetPreviousRoundsScoresSum(round);
+            var previousRoundsScoresSum = GetPreviousRoundScoresSum(round);
 
             var currentRoundRollsSum = GetCurrentRoundScore(round);
 
@@ -41,26 +41,29 @@ namespace BowlingScoreboard.Services
 
             RoundTypeDto roundTypeDto = null;
 
-            var isOpen = currentRoundRollsSum < pinsCount;
+            var isOpen = currentRoundRollsSum < PinsCount;
             if (isOpen)
             {
                 round.Score = previousRoundsScoresSum + currentRoundRollsSum;
                 roundTypeDto = _roundRepository.GetRoundTypeByName("Open");                
             }
 
-            var isStrike = firstRollScore == pinsCount;
+            var isStrike = firstRollScore == PinsCount;
             if (isStrike)
             {
                 round.Score = previousRoundsScoresSum + currentRoundRollsSum + 10;
                 roundTypeDto = _roundRepository.GetRoundTypeByName("Strike");
             }
 
-            var isSpare = currentRoundRollsSum == pinsCount;
+            var isSpare = currentRoundRollsSum == PinsCount;
             if (isSpare)
             {
                 round.Score = previousRoundsScoresSum + firstRollScore + 10;
                 roundTypeDto = _roundRepository.GetRoundTypeByName("Spare");
             }
+
+            if (!isSpare && !isOpen & !isStrike)
+                throw new ArgumentOutOfRangeException();
 
             round.RoundTypeId = roundTypeDto?.Id;
             
@@ -72,11 +75,11 @@ namespace BowlingScoreboard.Services
             return round.Rolls.Select(r => r.Score).Sum();
         }
 
-        private int GetPreviousRoundsScoresSum(RoundDto round)
+        private int GetPreviousRoundScoresSum(RoundDto round)
         {
             var playerRounds = _roundRepository.GetRoundsByPlayerId(round.PlayerId);
 
-            var playerRoundScoresSum = playerRounds.LastOrDefault()?.Score ?? 0;
+            var playerRoundScoresSum = playerRounds?.LastOrDefault()?.Score ?? 0;
 
             return playerRoundScoresSum;
         }
